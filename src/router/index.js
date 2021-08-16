@@ -89,6 +89,18 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/end',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'End',
+        component: () => import('@/views/end/index'),
+        meta: { title: '前端自动化测试', icon: 'end' }
+      }
+    ]
+  },
 
   {
     path: '/nested',

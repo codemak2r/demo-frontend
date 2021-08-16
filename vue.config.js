@@ -31,11 +31,21 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: port,
-    open: true,
-    overlay: {
-      warnings: false,
-      errors: true
+    proxy:{
+      '/dev':{
+        target: 'http://localhost:8090',
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/dev': ''
+        }
+      }
     },
+    // open: true,
+    // overlay: {
+    //   warnings: false,
+    //   errors: true
+    // },
     before: require('./mock/mock-server.js')
   },
   configureWebpack: {
