@@ -3,8 +3,8 @@
         <el-row>
             <el-col>
                 <el-button type="primary" size="small" @click="addNewCase" icon="el-icon-document-add">新增</el-button>
-                <el-button type="primary" size="small" @click="addNewCase" icon="el-icon-video-play">启用</el-button>
-                <el-button type="primary" size="small" @click="addNewCase" icon="el-icon-video-pause">禁用</el-button>
+                <el-button type="primary" size="small" @click="enableCase" icon="el-icon-video-play">启用</el-button>
+                <el-button type="primary" size="small" @click="disableCase" icon="el-icon-video-pause">禁用</el-button>
                 <el-button type="primary" size="small" @click="deleteCase" icon="el-icon-delete">删除</el-button>
                 <el-button type="primary" size="small" @click="runCase" icon="el-icon-caret-right">运行</el-button>
             </el-col>
@@ -54,22 +54,13 @@
 </template>
 <script>
 
-import { getCases } from '@/api/getEndCases'
+import { getCases } from '@/api/end'
 
 export default {
     name: "TableList",
     data() {
         return {
-            // tableData: [{
-            //     code: 0,
-            //     name: "",
-            //     desc: "",
-            //     owner: "",
-            //     status:"",
-            //     created_time:"",
-            //     modified_time:"" 
-
-            // }],
+          
             tableData:[],
             multipleSelection:[]
         }
@@ -81,7 +72,6 @@ export default {
         fetchData(){
             getCases().then(response => {
                this.tableData = response.data;
-             
             })
         },
         addNewCase(){
@@ -90,6 +80,10 @@ export default {
         deleteCase(){
 
         }, 
+        enableCase(){
+
+        },
+        disableCase(){},
         runCase(){
 
         }

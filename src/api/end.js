@@ -6,3 +6,11 @@ export function getCases() {
     method: 'get'
   })
 }
+
+export function createCase(data){
+  return request({
+    url: '/v1/end/case',
+    method: 'put',
+    data
+  })
+}

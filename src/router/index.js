@@ -92,6 +92,7 @@ export const constantRoutes = [
   {
     path: '/end',
     component: Layout,
+    redirect: '/end/index',
     children: [
       {
         path: 'index',

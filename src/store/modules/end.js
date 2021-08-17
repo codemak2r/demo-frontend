@@ -2,7 +2,6 @@ const state = {
     dialogVisible: false
 }
 
-
 const mutations = {
     TOGGLE_DIALOG: state => {
         if (state.dialogVisible){
