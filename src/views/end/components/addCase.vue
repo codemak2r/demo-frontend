@@ -70,7 +70,7 @@
                </el-col>
             </el-row>
 
-            <el-row v-for="item in form.steps" :key="item.orderNo" type="flex" :gutter="24">
+            <el-row v-for="item in form.steps" :key="item.orderNo" type="flex">
                 <el-col :span="4">                 
                     <el-form-item :rules="{required: true, message: '名称不能为空', trigger: 'blur'}">
                         <el-col :span="22">     
