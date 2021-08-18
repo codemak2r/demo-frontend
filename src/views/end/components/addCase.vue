@@ -65,12 +65,14 @@
             <el-row :gutter="24">
                <el-col :span="22">
                    <el-form-item>
-                    <el-button @click="addStep(sortedFormSteps[sortedFormSteps.length-1].orderNo, sortedFormSteps.length-1)">点击添加步骤</el-button>
+                       <el-col>
+                            <el-button @click="addStep(sortedFormSteps[sortedFormSteps.length-1].orderNo, sortedFormSteps.length-1)">点击添加步骤</el-button>
+                       </el-col>
                    </el-form-item>
                </el-col>
             </el-row>
 
-            <el-row v-for="(item, index) in sortedFormSteps" :key="item.orderNo" type="flex">
+            <el-row v-for="(item, index) in sortedFormSteps" :key="item.orderNo" :gutter="24">
                 <el-col :span="4">                 
                     <el-form-item :rules="{required: true, message: '名称不能为空', trigger: 'blur'}" :label="index+1">
                         <el-col :span="22">     
