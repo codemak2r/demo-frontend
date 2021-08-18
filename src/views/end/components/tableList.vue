@@ -60,7 +60,6 @@ export default {
     name: "TableList",
     data() {
         return {
-          
             tableData:[],
             multipleSelection:[]
         }
@@ -77,6 +76,12 @@ export default {
         addNewCase(){
             this.$store.dispatch('end/toggleDialogVisible')
         },
+        modifyCase(){
+            this.$store.dispatch('end/toggleDialogForUpdateVisible')
+        },
+        toggleLogs(){
+            this.$store.dispatch('end/toggleDialogForLogVisible')
+        }, 
         deleteCase(){
 
         }, 

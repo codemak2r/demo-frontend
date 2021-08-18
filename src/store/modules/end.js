@@ -1,5 +1,7 @@
 const state = {
-    dialogVisible: false
+    dialogVisible: false,
+    dialogForUpdateVisible: false,
+    dialogForLogVisible: false
 }
 
 const mutations = {
@@ -9,12 +11,33 @@ const mutations = {
         } else {
             state.dialogVisible = true
         }
-    }
+    },
+    TOGGLE_UPDATE_DIALOG: state => {
+        if (state.dialogForUpdateVisible){
+            state.dialogForUpdateVisible = false;
+        } else {
+            state.dialogForUpdateVisible = true
+        }
+    }, 
+    TOGGLE_LOG_DIALOG: state => {
+        if (state.dialogForLogVisible){
+            state.dialogForLogVisible = false;
+        } else {
+            state.dialogForLogVisible = true
+        }
+    }, 
+
 }
 
 const actions = {
     toggleDialogVisible({ commit }){
         commit('TOGGLE_DIALOG')
+    }, 
+    toggleDialogForUpdateVisible({ commit }){
+        commit('TOGGLE_UPDATE_DIALOG')
+    },
+    toggleDialogForLogVisible({ commit }){
+        commit('TOGGLE_LOG_DIALOG')
     }
 }
 

@@ -42,7 +42,6 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -53,6 +52,32 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
+  },
+  {
+    path: '/end',
+    component: Layout,
+    redirect: '/end/index',
+    children: [
+      {
+        path: 'index',
+        name: 'End',
+        component: () => import('@/views/end/index'),
+        meta: { title: '前端自动化测试', icon: 'end' }
+      }
+    ]
+  },
+  {
+    path: '/api',
+    component: Layout,
+    redirect: '/api/index',
+    children: [
+      {
+        path: 'index',
+        name: 'API',
+        component: () => import('@/views/api/index'),
+        meta: { title: 'api自动化测试', icon: 'api' }
+      }
+    ]
   },
 
   {
@@ -89,19 +114,7 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/end',
-    component: Layout,
-    redirect: '/end/index',
-    children: [
-      {
-        path: 'index',
-        name: 'End',
-        component: () => import('@/views/end/index'),
-        meta: { title: '前端自动化测试', icon: 'end' }
-      }
-    ]
-  },
+ 
 
   {
     path: '/nested',
@@ -162,16 +175,7 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
+
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
