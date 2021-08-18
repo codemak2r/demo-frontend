@@ -11,7 +11,7 @@
        
         
         <el-form ref="form" :model="form" label-width="80px">
-            <el-row>
+            <el-row  :gutter="24">
                 <el-col :span="8">
                     <el-form-item label="名称" label-position="left" >
                         <el-col :span="18">
@@ -30,7 +30,7 @@
 
             </el-row>
             
-            <el-row>
+            <el-row :gutter="24">
                 <el-col :span="8">
                     <el-form-item label="浏览器" label-position="left">
                         <el-col :span="24">
@@ -51,7 +51,7 @@
             </el-row>
            
 
-            <el-row>
+            <el-row :gutter="24">
                 <el-col>
                     <el-form-item label="描述" label-position="left">
                         <el-col :span="22">
@@ -62,7 +62,7 @@
             </el-row>
             
             
-            <el-row>
+            <el-row :gutter="24">
                <el-col :span="22">
                    <el-form-item>
                     <el-button @click="addStep">点击添加步骤</el-button>
@@ -70,7 +70,7 @@
                </el-col>
             </el-row>
 
-            <el-row v-for="item in form.steps" :key="item.orderNo" type="flex" >
+            <el-row v-for="item in form.steps" :key="item.orderNo" type="flex" :gutter="24">
                 <el-col :span="4">                 
                     <el-form-item :rules="{required: true, message: '名称不能为空', trigger: 'blur'}">
                         <el-col :span="22">     
