@@ -65,18 +65,18 @@
             <el-row :gutter="24">
                <el-col :span="22">
                    <el-form-item>
-                    <el-button @click="addStep">点击添加步骤</el-button>
+                    <el-button @click="addStep(sortedFormSteps[sortedFormSteps.length-1].orderNo, sortedFormSteps.length-1)">点击添加步骤</el-button>
                    </el-form-item>
                </el-col>
             </el-row>
 
-            <el-row v-for="item in form.steps" :key="item.orderNo" type="flex">
+            <el-row v-for="(item, index) in sortedFormSteps" :key="item.orderNo" type="flex">
                 <el-col :span="4">                 
-                    <el-form-item :rules="{required: true, message: '名称不能为空', trigger: 'blur'}">
+                    <el-form-item :rules="{required: true, message: '名称不能为空', trigger: 'blur'}" :label="index+1">
                         <el-col :span="22">     
                         <el-select v-model="item.action" placeholder="请选择">
-                            <el-option label="点击" value="click" />
-                            <el-option label="输入" value="send" />
+                            <el-option v-for="(item,index) in actions" :label="item.name" :value="item.value" :key="index"/>
+                            
                         </el-select>
                         </el-col>
                     </el-form-item>    
@@ -86,7 +86,7 @@
                         <el-col :span="22">
                         <el-select v-model="item.elementType" placeholder="请选择">
                             <el-option label="id" value="id" />
-                            <el-option label="xpath" value="xpath" />
+                            <el-option label="xpath" value="xpath"/>
                         </el-select>
                         </el-col>
                     </el-form-item>  
@@ -108,8 +108,7 @@
                 <el-col :span="4">
                     <el-form-item label-width="0px"> 
                         <el-button @click="deleteStep" type="danger" icon="el-icon-delete" circle></el-button>   
-                        <el-button @click="editStep" type="primary" icon="el-icon-edit" circle></el-button>               
-                        <el-button @click="addStep" type="success" icon="el-icon-document-add" circle></el-button>   
+                        <el-button @click="addStep(item.orderNo, index)" type="success" icon="el-icon-document-add" circle></el-button>   
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -132,18 +131,50 @@ export default {
     name: "AddCase",
     data(){
         return {
+            actions:[
+                {
+                    name: "点击",
+                    value: "click"
+                },
+                {
+                    name: "输入", 
+                    value: "send"
+                },
+                {
+                    name: "等待",
+                    value: "wait"
+                },
+                {
+                    name: "关闭", 
+                    value: "close"
+                }
+            ],
             orderNo: 0,
             form:{
                 name: "",
                 owner: "",
                 desc: "",
                 conf: {},
-                steps: []
+                steps: [{
+                    action:"click",
+                    elementType: "",
+                    element: "", 
+                    orderNo: 0
+                }]
             }
         }
     }, 
     computed: {
-        ...mapGetters(['dialogVisible'])
+        ...mapGetters(['dialogVisible']), 
+        
+        sortedFormSteps(){
+            let sortedSteps = this.form.steps.sort((a,b) => {
+                return a.orderNo - b.orderNo
+            })
+            console.log("sort:"+sortedSteps)
+            return sortedSteps
+        }
+        
 
     },
     methods:{
@@ -154,7 +185,12 @@ export default {
                 owner: "",
                 desc: "",
                 conf: {},
-                steps: []
+                steps: [{
+                    action:"click",
+                    elementType: "",
+                    element: "", 
+                    orderNo: 0
+                }]
             }
         },
         submitForm(form){
@@ -172,8 +208,13 @@ export default {
             
             return false
         },
-        addStep(){
-            this.orderNo += 1000; 
+        addStep(orderNo, index) {
+            if (index === this.sortedFormSteps.length -1 ) {
+                this.orderNo = orderNo + 1000
+            }else{
+                this.orderNo = (orderNo + this.sortedFormSteps[index+1].orderNo) / 2; 
+            }
+            console.log(this.sortedFormSteps)
             this.form.steps.push({
                 action:"click",
                 elementType: "",
@@ -186,7 +227,7 @@ export default {
 
     }, 
     mounted(){
-        console.log(this.dialogVisible)
+        console.log(this.sortedFormSteps)
     }
   
 }
