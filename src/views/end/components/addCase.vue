@@ -73,7 +73,7 @@
             </el-row>
 
             <el-row v-for="(item, index) in sortedFormSteps" :key="item.orderNo" :gutter="24">
-                <el-col :span="4">                 
+                <el-col :span="2">                 
                     <el-form-item :rules="{required: true, message: '名称不能为空', trigger: 'blur'}" :label="index+1">
                         <el-col :span="22">     
                         <el-select v-model="item.action" placeholder="请选择">
