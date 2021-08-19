@@ -182,6 +182,12 @@ export default {
             console.log(JSON.stringify(form))
             createCase(form).then(response => {
                 this.$router.go(0)
+                this.$message({
+                    message: '提交成功', 
+                    type: 'success'
+                })
+            }, error => {
+
             })
             
         },

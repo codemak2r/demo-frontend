@@ -3,7 +3,7 @@
         <el-row>
             <el-col>
                 <el-button type="primary" size="small" @click="addNewCase" icon="el-icon-document-add">新增</el-button>
-                <el-button type="primary" size="small" @click="enableCase" icon="el-icon-video-play">启用</el-button>
+                <el-button type="primary" size="small" @click="enableCase()" icon="el-icon-video-play">启用</el-button>
                 <el-button type="primary" size="small" @click="disableCase" icon="el-icon-video-pause">禁用</el-button>
                 <el-button type="primary" size="small" @click="deleteCase" icon="el-icon-delete">删除</el-button>
                 <el-button type="primary" size="small" @click="runCase" icon="el-icon-caret-right">运行</el-button>
@@ -36,7 +36,8 @@
                         </template>
                      </el-table-column>
                     <el-table-column prop="exc_status" label="执行状态"></el-table-column>
-                    <el-table-column prop="modify_time" label="修改时间"></el-table-column>
+                    <el-table-column prop="created_time" label="新建时间"></el-table-column>
+                    <el-table-column prop="modified_time" label="修改时间"></el-table-column>
                    
 
                     <el-table-column
@@ -44,7 +45,7 @@
                         width="100">
                         <template slot-scope="scope">
                             <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-                            <el-button type="text" size="small">编辑</el-button>
+                            <el-button @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -54,7 +55,8 @@
 </template>
 <script>
 
-import { getCases } from '@/api/end'
+import { getAllCases,  getCase, enableCase} from '@/api/end'
+
 
 export default {
     name: "TableList",
@@ -69,8 +71,10 @@ export default {
             this.multipleSelection = val;
         },
         fetchData(){
-            getCases().then(response => {
+            getAllCases().then(response => {
                this.tableData = response.data;
+            }, error => { 
+                console.log(error)
             })
         },
         addNewCase(){
@@ -86,11 +90,26 @@ export default {
 
         }, 
         enableCase(){
+            console.log(this.multipleSelection)
+            this.multipleSelection.forEach((item) => {
+                enableCase(item.id).then(res => {
 
+                }, err => {})
+            })
         },
         disableCase(){},
         runCase(){
 
+        }, 
+        handleEdit(row){
+            getCase(row.id).then(response => {
+                console.log(response)
+            }, error => {
+                this.$$message({
+                    message: '请求失败',
+                    type:'error'
+                })
+            })
         }
     },
     mounted(){

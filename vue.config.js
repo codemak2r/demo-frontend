@@ -31,31 +31,31 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: port,
-    proxy:{
-      '/dev':{
-        target: 'http://localhost:8090',
-        ws: true,
-        changeOrigin: true,
-        onProxyReq:function (proxyReq, req, res, options) {
-          if (req.body) {
-            let bodyData = JSON.stringify(req.body);
-            // incase if content-type is application/x-www-form-urlencoded -> we need to change to application/json
-            proxyReq.setHeader('Content-Type','application/json');
-            proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
-            // stream the content
-            proxyReq.write(bodyData);
-          }
-        },
-        pathRewrite: {
-          '^/dev': ''
-        }
-      }
-    },
-    // open: true,
-    // overlay: {
-    //   warnings: false,
-    //   errors: true
+    // proxy:{
+    //   '/dev':{
+    //     target: 'http://localhost:8090',
+    //     ws: true,
+    //     changeOrigin: true,
+    //     onProxyReq:function (proxyReq, req, res, options) {
+    //       if (req.body) {
+    //         let bodyData = JSON.stringify(req.body);
+    //         // incase if content-type is application/x-www-form-urlencoded -> we need to change to application/json
+    //         proxyReq.setHeader('Content-Type','application/json');
+    //         proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
+    //         // stream the content
+    //         proxyReq.write(bodyData);
+    //       }
+    //     },
+    //     pathRewrite: {
+    //       '^/dev': ''
+    //     }
+    //   }
     // },
+    open: true,
+    overlay: {
+      warnings: false,
+      errors: true
+    },
     before: require('./mock/mock-server.js')
   },
   configureWebpack: {
