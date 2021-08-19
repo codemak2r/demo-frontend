@@ -66,51 +66,48 @@
                <el-col :span="22">
                    <el-form-item>
                        <el-col>
-                            <el-button @click="addStep(sortedFormSteps[sortedFormSteps.length-1].orderNo, sortedFormSteps.length-1)">点击添加步骤</el-button>
+                            <el-button @click="addStep()">点击添加步骤</el-button>
                        </el-col>
                    </el-form-item>
                </el-col>
             </el-row>
 
-            <el-row v-for="(item, index) in sortedFormSteps" :key="item.orderNo" :gutter="24">
-                <el-col :span="2">                 
+            <el-row v-for="(item, index) in form.steps" :key="item.orderNo" :gutter="24">
+                
+                <el-col :xs="8" :sm="8" :md="8" :lg="5" :xl="5" style="padding-right:0px">               
                     <el-form-item :rules="{required: true, message: '名称不能为空', trigger: 'blur'}" :label="index+1">
-                        <el-col :span="22">     
+                        <el-col>  
                         <el-select v-model="item.action" placeholder="请选择">
                             <el-option v-for="(item,index) in actions" :label="item.name" :value="item.value" :key="index"/>
-                            
                         </el-select>
                         </el-col>
                     </el-form-item>    
                 </el-col>
-                <el-col :span="2"> 
+                <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4"> 
                     <el-form-item label-width="0px">
-                        <el-col :span="22">
                         <el-select v-model="item.elementType" placeholder="请选择">
                             <el-option label="id" value="id" />
                             <el-option label="xpath" value="xpath"/>
                         </el-select>
-                        </el-col>
+                        
                     </el-form-item>  
                 </el-col>
-                <el-col :span="8">
+                <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
                     <el-form-item label-width="2px">
-                        <el-col :span="23">
-                       <el-input v-model="item.element" />
-                        </el-col>
+                            <el-input v-model="item.element" />
                     </el-form-item>       
                 </el-col>
-                <el-col :span="4" v-if="ifActionExists(item.action)">
+
+                <el-col :xs="4" :sm="4" :md="4" :lg="4" :xl="4" v-if="ifActionExists(item.action)">
                     <el-form-item label-width="0px">
-                        <el-col :span="22">
-                            <el-input  v-model="item.value" />
-                        </el-col>
+                        <el-input  v-model="item.value" />
                     </el-form-item>               
-                </el-col>   
-                <el-col :span="4">
+                </el-col>  
+
+                <el-col :xs="2" :sm="4" :md="4" :lg="4" :xl="4">
                     <el-form-item label-width="0px"> 
-                        <el-button @click="deleteStep" type="danger" icon="el-icon-delete" circle></el-button>   
-                        <el-button @click="addStep(item.orderNo, index)" type="success" icon="el-icon-document-add" circle></el-button>   
+                        <el-button @click="deleteStep(index)" type="danger" icon="el-icon-delete" round title="删除"></el-button>   
+                        <el-button @click="addStep(index)" type="success" icon="el-icon-document-add" round title="插入一个新的步骤"></el-button>   
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -151,49 +148,34 @@ export default {
                     value: "close"
                 }
             ],
-            orderNo: 0,
+
             form:{
                 name: "",
                 owner: "",
                 desc: "",
                 conf: {},
-                steps: [{
-                    action:"click",
-                    elementType: "",
-                    element: "", 
-                    orderNo: 0
-                }]
+                steps: []
             }
         }
     }, 
     computed: {
-        ...mapGetters(['dialogVisible']), 
-        
-        sortedFormSteps(){
-            let sortedSteps = this.form.steps.sort((a,b) => {
-                return a.orderNo - b.orderNo
-            })
-            console.log("sort:"+sortedSteps)
-            return sortedSteps
-        }
-        
-
+        ...mapGetters(['dialogVisible'])
     },
     methods:{
-        handleClose(){
-            this.$store.dispatch('end/toggleDialogVisible')
+        init(){
             this.form = {
                 name: "",
                 owner: "",
                 desc: "",
                 conf: {},
-                steps: [{
-                    action:"click",
-                    elementType: "",
-                    element: "", 
-                    orderNo: 0
-                }]
+                steps: []
             }
+        }, 
+
+        handleClose(){
+            this.init()
+            this.$store.dispatch('end/toggleDialogVisible')
+
         },
         submitForm(form){
             console.log(form)
@@ -210,20 +192,24 @@ export default {
             
             return false
         },
-        addStep(orderNo, index) {
-            if (index === this.sortedFormSteps.length -1 ) {
-                this.orderNo = orderNo + 1000
-            }else{
-                this.orderNo = (orderNo + this.sortedFormSteps[index+1].orderNo) / 2; 
-            }
-            console.log(this.sortedFormSteps)
-            this.form.steps.push({
+        addStep(index) {
+            let steps = this.form.steps; 
+            let step = {
                 action:"click",
                 elementType: "",
-                element: "", 
-                value: this.value,
-                orderNo: this.orderNo
-            })
+                element: "",
+                orderNo: index * 65536
+            }
+            if(index == undefined){
+                steps.push(step)
+            }else{
+                steps.splice(index+1, 0, step)
+            }
+            
+            
+        },
+        deleteStep(index){
+            this.form.steps.pop(index)
         }
     
 
