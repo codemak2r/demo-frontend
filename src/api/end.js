@@ -37,9 +37,13 @@ export function getCase(id){
   })
 }
 
-export function enableCase(id) {
+export async function enableCase(id) {
   return request({
-    url: '/end/cases/' + id, 
+    url: '/end/xxxxx/' + id, 
     method: 'post'
+  }).then(res => {
+    console.log("先执行我把")
+  },error => {
+    alert(error)
   })
 }

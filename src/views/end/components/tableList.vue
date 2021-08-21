@@ -3,7 +3,7 @@
         <el-row>
             <el-col>
                 <el-button type="primary" size="small" @click="addNewCase" icon="el-icon-document-add">新增</el-button>
-                <el-button type="primary" size="small" @click="enableCase()" icon="el-icon-video-play">启用</el-button>
+                <el-button type="primary" size="small" @click="enable(multipleSelection)" icon="el-icon-video-play">启用</el-button>
                 <el-button type="primary" size="small" @click="disableCase" icon="el-icon-video-pause">禁用</el-button>
                 <el-button type="primary" size="small" @click="deleteCase" icon="el-icon-delete">删除</el-button>
                 <el-button type="primary" size="small" @click="runCase" icon="el-icon-caret-right">运行</el-button>
@@ -56,6 +56,8 @@
 <script>
 
 import { getAllCases,  getCase, enableCase} from '@/api/end'
+import en from 'element-ui/lib/locale/lang/en'
+import Axios from 'axios'
 
 
 export default {
@@ -68,7 +70,8 @@ export default {
     }, 
     methods: {
         handleSelectionChange(val) {
-            this.multipleSelection = val;
+            this.multipleSelection = val
+            console.log(this.multipleSelection)
         },
         fetchData(){
             getAllCases().then(response => {
@@ -89,13 +92,38 @@ export default {
         deleteCase(){
 
         }, 
-        enableCase(){
-            console.log(this.multipleSelection)
-            this.multipleSelection.forEach((item) => {
-                enableCase(item.id).then(res => {
-
-                }, err => {})
+        async testEnable(){
+            try{
+                
+                const axios = require('axios');
+                await axios.get("http://www")
+                return true
+            }catch(error){
+                return false
+            }
+        },
+        enable(multipleSelection){
+            let successMessage = '启用成功： '
+            let errorMessage = '启用失败： ' 
+            var flag = true
+            var arrs = []
+            multipleSelection.forEach(async element => {
+                await enableCase(element.id)
+            });
+            
+            
+            if(flag) {
+                this.$message({
+                message: successMessage,
+                type: 'success'
             })
+            }else{
+                this.$message({
+                message: errorMessage,
+                type: 'error'
+            })
+            }
+            
         },
         disableCase(){},
         runCase(){

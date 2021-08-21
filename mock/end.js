@@ -2,7 +2,7 @@ const Mock = require('mockjs')
 // http://mockjs.com/examples.html#Text
 const data = Mock.mock({
     'items|30': [{
-        id: '1',
+        id: '@id',
         name: '@cword(0,10)',
         desc: '@cparagraph(1)',
         owner: '@cname()',
@@ -52,13 +52,14 @@ const details = Mock.mock({
 })
 module.exports = [
     {
-        url: '/end/cases/[0-9]+',
+        url: '/end/cases/[0-9]',
         type: 'post',
         response: (req,res) => {
-            if (data.item[id].status == 1) {
-                data.item[id].status = 0
+            
+            if (data.items[1].status == 1) {
+                data.items[1].status = 0
             }else {
-                data.item[id].status = 1
+                data.items[1].status = 1
             }
             return {
                 status: 200,
