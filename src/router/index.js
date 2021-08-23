@@ -62,10 +62,24 @@ export const constantRoutes = [
         path: 'index',
         name: 'End',
         component: () => import('@/views/end/index'),
-        meta: { title: '前端自动化测试', icon: 'end' }
-      }
+        meta: { title: '前端自动化测试', icon: 'end' },
+      },
+    
     ]
   },
+  {
+    path: '/end/:projectId',
+    component: Layout,
+    redirect: '/cases',
+    children: [
+      {
+        path: 'cases',
+        name: 'project',
+        component: () => import('@/views/end/cases/index')
+      },
+    ]
+  },
+  
   {
     path: '/api',
     component: Layout,
@@ -114,7 +128,6 @@ export const constantRoutes = [
       }
     ]
   },
- 
 
   {
     path: '/nested',
@@ -174,7 +187,7 @@ export const constantRoutes = [
       }
     ]
   },
-
+  
 
 
   // 404 page must be placed at the end !!!

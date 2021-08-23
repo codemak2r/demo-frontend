@@ -1,7 +1,7 @@
 const state = {
     dialogVisible: false,
     dialogForUpdateVisible: false,
-    dialogForLogVisible: false
+    dialogForLogVisible: false, 
 }
 
 const mutations = {

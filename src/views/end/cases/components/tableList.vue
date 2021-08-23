@@ -5,8 +5,8 @@
                 <el-button type="primary" size="small" @click="addNewCase" icon="el-icon-document-add">新增</el-button>
                 <el-button type="primary" size="small" @click="enable(multipleSelection)" icon="el-icon-video-play">启用</el-button>
                 <el-button type="primary" size="small" @click="disableCase" icon="el-icon-video-pause">禁用</el-button>
-                <el-button type="primary" size="small" @click="deleteCase" icon="el-icon-delete">删除</el-button>
-                <el-button type="primary" size="small" @click="runCase" icon="el-icon-caret-right">运行</el-button>
+                <el-button type="primary" size="small" @click="deleteCase()" icon="el-icon-delete">删除</el-button>
+                <el-button type="primary" size="small" @click="runCase()" icon="el-icon-caret-right">运行</el-button>
             </el-col>
         </el-row>
        
@@ -55,9 +55,8 @@
 </template>
 <script>
 
-import { getAllCases,  getCase, enableCase} from '@/api/end'
-import en from 'element-ui/lib/locale/lang/en'
-import Axios from 'axios'
+import { getAllCases,  getCase, enableCase, runCase, deleteCase} from '@/api/end'
+
 
 
 export default {
@@ -65,7 +64,8 @@ export default {
     data() {
         return {
             tableData:[],
-            multipleSelection:[]
+            multipleSelection:[],
+            projectId: this.$route.params.projectId
         }
     }, 
     methods: {
@@ -74,7 +74,7 @@ export default {
             console.log(this.multipleSelection)
         },
         fetchData(){
-            getAllCases().then(response => {
+            getAllCases(this.projectId).then(response => {
                this.tableData = response.data;
             }, error => { 
                 console.log(error)
@@ -90,44 +90,22 @@ export default {
             this.$store.dispatch('end/toggleDialogForLogVisible')
         }, 
         deleteCase(){
-
+            this.multipleSelection.forEach( item => {
+                deleteCase(item.id)
+            })
+            this.$router.go(0)
+            
         }, 
-        async testEnable(){
-            try{
-                
-                const axios = require('axios');
-                await axios.get("http://www")
-                return true
-            }catch(error){
-                return false
-            }
-        },
         enable(multipleSelection){
-            let successMessage = '启用成功： '
-            let errorMessage = '启用失败： ' 
-            var flag = true
-            var arrs = []
-            multipleSelection.forEach(async element => {
-                await enableCase(element.id)
-            });
             
-            
-            if(flag) {
-                this.$message({
-                message: successMessage,
-                type: 'success'
-            })
-            }else{
-                this.$message({
-                message: errorMessage,
-                type: 'error'
-            })
-            }
             
         },
         disableCase(){},
-        runCase(){
 
+        runCase(){
+            this.multipleSelection.forEach( item => {
+                runCase(item.id)
+            })
         }, 
         handleEdit(row){
             getCase(row.id).then(response => {

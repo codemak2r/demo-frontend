@@ -15,7 +15,7 @@
                 <el-col :span="8">
                     <el-form-item label="名称" label-position="left" >
                         <el-col :span="18">
-                            <el-input v-model="form.name" />
+                            <el-input v-model="form.cases.name" />
                         </el-col>
                     </el-form-item>
                 </el-col>
@@ -23,18 +23,28 @@
                 <el-col :span="8">
                     <el-form-item label="维护人" label-position="left">
                         <el-col :span="18">
-                            <el-input v-model="form.owner" />
+                            <el-input v-model="form.cases.owner" />
                         </el-col>
                     </el-form-item>
                 </el-col>
 
             </el-row>
             
+             <el-row :gutter="24">
+                <el-col>
+                    <el-form-item label="描述" label-position="left">
+                        <el-col :span="22">
+                            <el-input type="textarea" v-model="form.cases.desc" />
+                        </el-col>
+                    </el-form-item> 
+                </el-col>
+            </el-row>
+            
             <el-row :gutter="24">
                 <el-col :span="8">
                     <el-form-item label="浏览器" label-position="left">
                         <el-col :span="24">
-                        <el-select v-model="form.conf.browser" placeholder="请选择">
+                        <el-select v-model="form.confs.browser" placeholder="请选择">
                             <el-option label="Chrome" value="1" />
                             <el-option label="Firefox" value="2" />
                         </el-select>
@@ -44,24 +54,11 @@
                 <el-col>
                     <el-form-item label="URL" label-position="left">
                         <el-col :span="22">
-                        <el-input v-model="form.conf.testUrl" />
+                        <el-input v-model="form.confs.testUrl" />
                         </el-col>
                     </el-form-item>
                 </el-col>
             </el-row>
-           
-
-            <el-row :gutter="24">
-                <el-col>
-                    <el-form-item label="描述" label-position="left">
-                        <el-col :span="22">
-                            <el-input type="textarea" v-model="form.desc" />
-                        </el-col>
-                    </el-form-item> 
-                </el-col>
-            </el-row>
-            
-            
             <el-row :gutter="24">
                <el-col :span="22">
                    <el-form-item>
@@ -75,7 +72,7 @@
             <el-row v-for="(item, index) in form.steps" :key="item.orderNo" :gutter="24">
                 
                 <el-col :xs="8" :sm="8" :md="8" :lg="5" :xl="5" style="padding-right:0px">               
-                    <el-form-item :rules="{required: true, message: '名称不能为空', trigger: 'blur'}" :label="index+1">
+                    <el-form-item :rules="{required: true, message: '名称不能为空', trigger: 'blur'}" :label="(index+1).toString()">
                         <el-col>  
                         <el-select v-model="item.action" placeholder="请选择">
                             <el-option v-for="(item,index) in actions" :label="item.name" :value="item.value" :key="index"/>
@@ -128,8 +125,12 @@ import { createCase } from '@/api/end'
 
 export default {
     name: "AddCase",
+    props:{
+        
+    },
     data(){
         return {
+            projectId: this.$route.params.projectId,
             actions:[
                 {
                     name: "点击",
@@ -150,10 +151,8 @@ export default {
             ],
 
             form:{
-                name: "",
-                owner: "",
-                desc: "",
-                conf: {},
+                cases:{},
+                confs: {},
                 steps: []
             }
         }
@@ -164,10 +163,8 @@ export default {
     methods:{
         init(){
             this.form = {
-                name: "",
-                owner: "",
-                desc: "",
-                conf: {},
+                cases: {},
+                confs: {},
                 steps: []
             }
         }, 
@@ -178,16 +175,13 @@ export default {
 
         },
         submitForm(form){
-            console.log(form)
-            console.log(JSON.stringify(form))
-            createCase(form).then(response => {
+            console.log(this.projectId)
+            createCase(this.projectId, form).then(response => {
                 this.$router.go(0)
                 this.$message({
                     message: '提交成功', 
                     type: 'success'
                 })
-            }, error => {
-
             })
             
         },
@@ -200,25 +194,25 @@ export default {
         },
         addStep(index) {
             let steps = this.form.steps; 
+
+            if(index == undefined){
+                index = steps.length - 1; 
+            }
+
             let step = {
                 action:"click",
                 elementType: "",
                 element: "",
-                orderNo: index * 65536
-            }
-            if(index == undefined){
-                steps.push(step)
-            }else{
-                steps.splice(index+1, 0, step)
+                orderNo: (index+1) * 65536
             }
             
+            steps.splice(index+1, 0, step)
             
         },
         deleteStep(index){
             this.form.steps.pop(index)
         }
     
-
     }, 
     mounted(){
         console.log(this.sortedFormSteps)
